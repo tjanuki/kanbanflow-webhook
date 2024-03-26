@@ -10,16 +10,10 @@ class KanbanFlowWebhookController extends Controller
 {
     public function handleWebhook(Request $request)
     {
-        // Process the KanbanFlow webhook payload
         $data = $request->all();
 
-        // For example, logging the received webhook
         Log::info('Received KanbanFlow webhook', $data);
-        if (isset($data['task'])) {
-            Log::info('Task ID: ' . $data['task']['_id']);
-        } else {
-            Log::info('No task data found');
-
+        if (!isset($data['task'])) {
             return response()->json(['message' => 'No task data found']);
         }
 
@@ -37,7 +31,6 @@ class KanbanFlowWebhookController extends Controller
             ]
         );
 
-        // Assuming you're replacing all subtasks each time for simplicity
         $task->subTasks()->delete();
         foreach ($data['task']['subTasks'] as $subTaskData) {
             $task->subTasks()->create([
@@ -47,6 +40,6 @@ class KanbanFlowWebhookController extends Controller
         }
 
         // Respond to KanbanFlow
-        return response()->json(['message' => 'Webhook received successfully']);
+        return response()->json(['message' => "Webhook received successfully {$task->name}"]);
     }
 }
