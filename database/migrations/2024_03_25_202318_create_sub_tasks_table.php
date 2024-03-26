@@ -13,14 +13,10 @@ return new class extends Migration
     {
         Schema::create('sub_tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('kanbanflow_task_id')->unique();
+            $table->foreignId('task_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->text('description')->nullable();
-            $table->string('color');
-            $table->string('column_id');
-            $table->bigInteger('total_seconds_spent');
-            $table->bigInteger('total_seconds_estimate');
-            $table->text('changed_properties')->nullable();
+            $table->boolean('finished');
+            $table->timestamps();
             $table->timestamps();
         });
     }

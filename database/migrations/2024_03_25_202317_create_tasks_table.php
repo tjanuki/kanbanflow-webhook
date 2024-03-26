@@ -12,11 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tasks', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('task_id')->constrained()->onDelete('cascade');
+            $table->string('kanbanflow_task_id')->unique();
             $table->string('name');
-            $table->boolean('finished');
-            $table->timestamps();
+            $table->text('description')->nullable();
+            $table->string('color');
+            $table->string('column_id');
+            $table->bigInteger('total_seconds_spent');
+            $table->bigInteger('total_seconds_estimate');
+            $table->text('changed_properties')->nullable();
         });
     }
 
