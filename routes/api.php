@@ -8,6 +8,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/kanbanflow-webhook', [KanbanFlowWebhookController::class, 'handleWebhook'])
+Route::match(['get', 'post'], '/kanbanflow-webhook', [KanbanFlowWebhookController::class, 'handleWebhook'])
 //    ->middleware('auth:sanctum');
 ;
