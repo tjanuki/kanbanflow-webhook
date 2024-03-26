@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('finished');
             $table->timestamps();
-            $table->timestamps();
         });
     }
 

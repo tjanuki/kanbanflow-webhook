@@ -20,6 +20,7 @@ return new class extends Migration
             $table->bigInteger('total_seconds_spent');
             $table->bigInteger('total_seconds_estimate');
             $table->text('changed_properties')->nullable();
+            $table->timestamps();
         });
     }
 
