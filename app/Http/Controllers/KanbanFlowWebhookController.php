@@ -12,7 +12,6 @@ class KanbanFlowWebhookController extends Controller
     {
         $data = $request->all();
 
-        Log::info('Received KanbanFlow webhook', $data);
         if (!isset($data['task'])) {
             return response()->json(['message' => 'No task data found']);
         }
