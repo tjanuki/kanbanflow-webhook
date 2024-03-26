@@ -15,6 +15,13 @@ class KanbanFlowWebhookController extends Controller
 
         // For example, logging the received webhook
         Log::info('Received KanbanFlow webhook', $data);
+        if (isset($data['task'])) {
+            Log::info('Task ID: ' . $data['task']['_id']);
+        } else {
+            Log::info('No task data found');
+
+            return response()->json(['message' => 'No task data found']);
+        }
 
         // Create or update the task
         $task = Task::updateOrCreate(
