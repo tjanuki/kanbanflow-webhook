@@ -36,6 +36,7 @@ class KanbanFlowWebhookController extends Controller
             $task->date = $task->created_at->isMonday()
                 ? $task->created_at->subDays(2)->toDateString()
                 : $task->created_at->subDay()->toDateString();
+            $task->save();
         }
 
         $task->subTasks()->delete();
