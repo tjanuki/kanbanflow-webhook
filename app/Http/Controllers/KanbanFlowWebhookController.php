@@ -30,6 +30,14 @@ class KanbanFlowWebhookController extends Controller
             ]
         );
 
+        if (!$task->date) {
+            // if the task was created on Monday, set the date to the previous Saturday
+            // otherwise, set the date to the previous day
+            $task->date = $task->created_at->isMonday()
+                ? $task->created_at->subDays(2)->toDateString()
+                : $task->created_at->subDay()->toDateString();
+        }
+
         $task->subTasks()->delete();
         foreach ($data['task']['subTasks'] as $subTaskData) {
             $task->subTasks()->create([
