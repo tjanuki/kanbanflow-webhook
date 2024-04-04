@@ -10,8 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TaskResource extends Resource
 {
@@ -34,16 +32,10 @@ class TaskResource extends Resource
                     ->required(),
                 Forms\Components\Textarea::make('description')
                     ->label('Description'),
+                // set projects as color
                 Forms\Components\Select::make('color')
-                    ->label('Color')
-                    ->options([
-                        'red' => 'Red',
-                        'yellow' => 'Yellow',
-                        'green' => 'Green',
-                        'blue' => 'Blue',
-                        'purple' => 'Purple',
-                        'gray' => 'Gray',
-                    ])
+                    ->label('Project')
+                    ->relationship('project', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('column_id')
                     ->label('Column ID')
@@ -58,14 +50,20 @@ class TaskResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('date')->sortable(),
+                Tables\Columns\TextColumn::make('project.name')->label('Project'),
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('description'),
-                Tables\Columns\TextColumn::make('color'),
-                Tables\Columns\TextColumn::make('column_id'),
-                Tables\Columns\TextColumn::make('total_seconds_spent'),
+                Tables\Columns\TextColumn::make('total_seconds_spent')
+                    ->formatStateUsing(fn(int $state) => number_format($state / 3600, 2)),
             ])
+            ->defaultSort('date', 'desc')
+            ->persistSortInSession()
             ->filters([
-                //
+                // filter by project
+                Tables\Filters\SelectFilter::make('color')
+                    ->options(fn() => \App\Models\Project::pluck('name', 'color')->toArray())
+                    ->label('Project')
+                    ->default('cyan'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
