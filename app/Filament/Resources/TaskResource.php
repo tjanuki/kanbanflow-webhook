@@ -76,6 +76,7 @@ class TaskResource extends Resource
                                 '10' => 'October', '11' => 'November', '12' => 'December',
                             ])
                             ->label('Month')
+                            ->default(now()->month)
                             ->required(),
                         Forms\Components\TextInput::make('year')
                             ->numeric()
