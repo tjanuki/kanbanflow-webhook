@@ -25,7 +25,7 @@ class TaskResource extends Resource
                 Forms\Components\TextInput::make('kanbanflow_task_id')
                     ->label('Kanbanflow Task ID')
                     ->required(),
-                Forms\Components\Datepicker::make('date')
+                Forms\Components\DatePicker::make('date')
                     ->label('Date')
                     ->required(),
                 Forms\Components\TextInput::make('name')
