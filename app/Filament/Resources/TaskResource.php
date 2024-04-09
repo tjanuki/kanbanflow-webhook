@@ -21,30 +21,7 @@ class TaskResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\TextInput::make('kanbanflow_task_id')
-                    ->label('Kanbanflow Task ID')
-                    ->required(),
-                Forms\Components\DatePicker::make('date')
-                    ->label('Date')
-                    ->required(),
-                Forms\Components\TextInput::make('name')
-                    ->label('Name')
-                    ->required(),
-                Forms\Components\Textarea::make('description')
-                    ->label('Description'),
-                // set projects as color
-                Forms\Components\Select::make('color')
-                    ->label('Project')
-                    ->relationship('project', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('column_id')
-                    ->label('Column ID')
-                    ->required(),
-                Forms\Components\TextInput::make('total_seconds_spent')
-                    ->label('Total Seconds Spent')
-                    ->required(),
-            ]);
+            ->schema(Task::getForm());
     }
 
     public static function table(Table $table): Table
@@ -94,7 +71,7 @@ class TaskResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->modalHeading('Edit Task')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
