@@ -20,6 +20,7 @@ class WeeklySummaryWidget extends BaseWidget
                 Task::query()
                     ->selectRaw("DATE_FORMAT(STR_TO_DATE(CONCAT(YEARWEEK(date), ' Monday'), '%X%V %W'), '%Y-%m-%d') as week, SUM(total_seconds_spent) as total_seconds_spent")
                     ->whereDate('date', '>=', today()->startOfMonth())
+                    ->client()
                     ->groupBy('week')
                     ->orderBy('week', 'desc')
             )

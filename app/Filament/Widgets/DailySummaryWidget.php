@@ -19,7 +19,7 @@ class DailySummaryWidget extends BaseWidget
                 Task::query()
                     ->selectRaw('date, SUM(total_seconds_spent) as total_seconds_spent')
                     ->whereBetween('date', [today()->startOfMonth(), today()->endOfMonth()])
-                    ->where('color', 'cyan')
+                    ->client()
                     ->groupBy('date')
                     ->orderBy('date', 'desc')
             )

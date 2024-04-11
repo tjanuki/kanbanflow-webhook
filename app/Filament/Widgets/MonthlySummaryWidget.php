@@ -18,6 +18,7 @@ class MonthlySummaryWidget extends BaseWidget
             ->query(
                 Task::query()
                     ->selectRaw("DATE_FORMAT(date, '%Y-%m') as month, SUM(total_seconds_spent) as total_seconds_spent")
+                    ->client()
                     ->groupBy('month')
                     ->orderBy('month', 'desc')
             )
