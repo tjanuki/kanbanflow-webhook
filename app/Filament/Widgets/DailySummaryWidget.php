@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Task;
+use Carbon\Carbon;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -25,7 +26,9 @@ class DailySummaryWidget extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('date')
-                    ->date()
+                    ->formatStateUsing(function ($state) {
+                        return Carbon::parse($state)->format('Y-m-d [D]');
+                    })
                     ->label('Date'),
                 Tables\Columns\TextColumn::make('total_seconds_spent')
                     ->label('Time Spent (Hours)')
