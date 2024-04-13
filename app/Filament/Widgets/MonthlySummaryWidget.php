@@ -27,7 +27,7 @@ class MonthlySummaryWidget extends BaseWidget
                     ->label('Month'),
                 Tables\Columns\TextColumn::make('total_seconds_spent')
                     ->label('Time Spent (Hours)')
-                    ->formatStateUsing(fn($state) => sprintf('%02d:%02d', ($state / 3600), ($state / 60 % 60), $state % 60)), // Convert seconds to H:i:s
+                    ->formatStateUsing(fn($state) => round($state / 3600, 1)),
             ]);
     }
 
