@@ -32,7 +32,7 @@ class DailySummaryWidget extends BaseWidget
                     ->label('Date'),
                 Tables\Columns\TextColumn::make('total_seconds_spent')
                     ->label('Time Spent (Hours)')
-                    ->formatStateUsing(fn($state) => round($state / 3600, 1)),
+                    ->formatStateUsing(fn($state) => number_format($state / 3600, 1)),
             ]);
     }
 
