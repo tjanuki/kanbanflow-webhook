@@ -18,11 +18,12 @@ class DailySummaryWidget extends BaseWidget
         return $table
             ->query(
                 Task::query()
-                    ->selectRaw('date, SUM(total_seconds_spent) as total_seconds_spent')
-                    ->whereDate('date', '>=', today()->startOfWeek())
+                    ->selectRaw('tasks.date, SUM(tasks.total_seconds_spent) as total_seconds_spent, MAX(estimates.estimated_seconds) as estimated_seconds')
+                    ->leftJoin('estimates', 'tasks.date', '=', 'estimates.date')
+                    ->whereDate('tasks.date', '>=', today()->startOfWeek())
                     ->client()
-                    ->groupBy('date')
-                    ->orderBy('date', 'desc')
+                    ->groupBy('tasks.date')
+                    ->orderBy('tasks.date', 'desc')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('date')
@@ -31,8 +32,18 @@ class DailySummaryWidget extends BaseWidget
                     })
                     ->label('Date'),
                 Tables\Columns\TextColumn::make('total_seconds_spent')
-                    ->label('Time Spent (Hours)')
-                    ->formatStateUsing(fn($state) => number_format($state / 3600, 1)),
+                    ->label('Spent (Hours)')
+                    ->formatStateUsing(fn ($state) => number_format($state / 3600, 1))
+                    ->alignRight(),
+                Tables\Columns\TextColumn::make('estimated_seconds')
+                    ->label('Estimated (Hours)')
+                    ->formatStateUsing(fn ($state) => number_format($state / 3600, 1))
+                    ->alignRight(),
+                Tables\Columns\TextColumn::make('difference')
+                    ->label('Diff (Hours)')
+                    ->getStateUsing(fn ($record
+                    ) => number_format(($record->total_seconds_spent - $record->estimated_seconds) / 3600, 1))
+                    ->alignRight(),
             ]);
     }
 
