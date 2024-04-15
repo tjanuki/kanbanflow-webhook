@@ -48,6 +48,7 @@ class EstimateResource extends Resource
                 Tables\Columns\TextColumn::make('estimated_seconds')
                     ->formatStateUsing(fn(int $state) => number_format($state / 3600, 1)),
             ])
+            ->defaultSort('date', 'desc')
             ->filters([
                 //
             ])
