@@ -18,8 +18,9 @@ class WeeklySummaryWidget extends BaseWidget
         return $table
             ->query(
                 Task::query()
-                    ->selectRaw("DATE_FORMAT(STR_TO_DATE(CONCAT(YEARWEEK(date), ' Monday'), '%X%V %W'), '%Y-%m-%d') as week, SUM(total_seconds_spent) as total_seconds_spent")
-                    ->whereDate('date', '>=', today()->startOfMonth())
+                    ->selectRaw("DATE_FORMAT(STR_TO_DATE(CONCAT(YEARWEEK(tasks.date), ' Monday'), '%X%V %W'), '%Y-%m-%d') as week, SUM(total_seconds_spent) as total_seconds_spent, MAX(estimates.estimated_seconds) as estimated_seconds")
+                    ->leftJoin('estimates', 'tasks.date', '=', 'estimates.date')
+                    ->whereDate('tasks.date', '>=', today()->startOfMonth())
                     ->client()
                     ->groupBy('week')
                     ->orderBy('week', 'desc')
@@ -28,8 +29,18 @@ class WeeklySummaryWidget extends BaseWidget
                 Tables\Columns\TextColumn::make('week')
                     ->label('Week'),
                 Tables\Columns\TextColumn::make('total_seconds_spent')
-                    ->label('Time Spent (Hours)')
-                    ->formatStateUsing(fn($state) => number_format($state / 3600, 1)),
+                    ->label('Spent (Hours)')
+                    ->formatStateUsing(fn($state) => number_format($state / 3600, 1))
+                    ->alignRight(),
+                Tables\Columns\TextColumn::make('estimated_seconds')
+                    ->label('Estimated (Hours)')
+                    ->formatStateUsing(fn($state) => number_format($state / 3600, 1))
+                    ->alignRight(),
+                Tables\Columns\TextColumn::make('difference')
+                    ->label('Diff (Hours)')
+                    ->getStateUsing(fn($record
+                    ) => number_format(($record->total_seconds_spent - $record->estimated_seconds) / 3600, 1))
+                    ->alignRight(),
             ]);
     }
 

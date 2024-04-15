@@ -17,7 +17,8 @@ class MonthlySummaryWidget extends BaseWidget
         return $table
             ->query(
                 Task::query()
-                    ->selectRaw("DATE_FORMAT(date, '%Y-%m') as month, SUM(total_seconds_spent) as total_seconds_spent")
+                    ->selectRaw("DATE_FORMAT(tasks.date, '%Y-%m') as month, SUM(tasks.total_seconds_spent) as total_seconds_spent, MAX(estimates.estimated_seconds) as estimated_seconds")
+                    ->leftJoin('estimates', 'tasks.date', '=', 'estimates.date')
                     ->client()
                     ->groupBy('month')
                     ->orderBy('month', 'desc')
@@ -26,8 +27,18 @@ class MonthlySummaryWidget extends BaseWidget
                 Tables\Columns\TextColumn::make('month')
                     ->label('Month'),
                 Tables\Columns\TextColumn::make('total_seconds_spent')
-                    ->label('Time Spent (Hours)')
-                    ->formatStateUsing(fn($state) => number_format($state / 3600, 1)),
+                    ->label('Spent (Hours)')
+                    ->formatStateUsing(fn($state) => number_format($state / 3600, 1))
+                    ->alignRight(),
+                Tables\Columns\TextColumn::make('estimated_seconds')
+                    ->label('Estimated (Hours)')
+                    ->formatStateUsing(fn($state) => number_format($state / 3600, 1))
+                    ->alignRight(),
+                Tables\Columns\TextColumn::make('difference')
+                    ->label('Diff (Hours)')
+                    ->getStateUsing(fn($record
+                    ) => number_format(($record->total_seconds_spent - $record->estimated_seconds) / 3600, 1))
+                    ->alignRight(),
             ]);
     }
 
