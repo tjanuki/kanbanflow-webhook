@@ -18,7 +18,7 @@ class WeeklySummaryWidget extends BaseWidget
         return $table
             ->query(
                 Task::query()
-                    ->selectRaw("DATE_FORMAT(STR_TO_DATE(CONCAT(YEARWEEK(tasks.date), ' Monday'), '%X%V %W'), '%Y-%m-%d') as week, SUM(total_seconds_spent) as total_seconds_spent, MAX(estimates.estimated_seconds) as estimated_seconds")
+                    ->selectRaw("DATE_FORMAT(STR_TO_DATE(CONCAT(YEARWEEK(tasks.date), ' Monday'), '%X%V %W'), '%Y-%m-%d') as week, SUM(total_seconds_spent) as total_seconds_spent, SUM(estimates.estimated_seconds) as estimated_seconds")
                     ->leftJoin('estimates', 'tasks.date', '=', 'estimates.date')
                     ->whereDate('tasks.date', '>=', today()->startOfMonth())
                     ->client()

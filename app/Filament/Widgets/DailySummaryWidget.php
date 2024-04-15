@@ -18,7 +18,7 @@ class DailySummaryWidget extends BaseWidget
         return $table
             ->query(
                 Task::query()
-                    ->selectRaw('tasks.date, SUM(tasks.total_seconds_spent) as total_seconds_spent, MAX(estimates.estimated_seconds) as estimated_seconds')
+                    ->selectRaw('tasks.date, SUM(tasks.total_seconds_spent) as total_seconds_spent, SUM(estimates.estimated_seconds) as estimated_seconds')
                     ->leftJoin('estimates', 'tasks.date', '=', 'estimates.date')
                     ->whereDate('tasks.date', '>=', today()->startOfWeek())
                     ->client()
