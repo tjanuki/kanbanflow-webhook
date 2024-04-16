@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Estimate;
 use App\Models\Task;
 use Carbon\Carbon;
 use Filament\Tables;
@@ -17,13 +18,16 @@ class DailySummaryWidget extends BaseWidget
     {
         return $table
             ->query(
-                Task::query()
-                    ->selectRaw('tasks.date, SUM(tasks.total_seconds_spent) as total_seconds_spent, SUM(estimates.estimated_seconds) as estimated_seconds')
-                    ->leftJoin('estimates', 'tasks.date', '=', 'estimates.date')
-                    ->whereDate('tasks.date', '>=', today()->startOfWeek())
-                    ->client()
-                    ->groupBy('tasks.date')
-                    ->orderBy('tasks.date', 'desc')
+                Estimate::query()
+                    ->selectRaw('estimates.date, SUM(tasks.total_seconds_spent) as total_seconds_spent, MAX(estimates.estimated_seconds) as estimated_seconds')
+                    ->leftJoin('tasks', function ($join) {
+                        $join->on('estimates.date', '=', 'tasks.date')
+                            ->where('tasks.color', 'cyan');
+                    })
+                    ->whereDate('estimates.date', '>=', today()->startOfWeek())
+                    ->whereDate('estimates.date', '<=', today()->endOfWeek())
+                    ->groupBy('estimates.date')
+                    ->orderBy('estimates.date', 'desc')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('date')

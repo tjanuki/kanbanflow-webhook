@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Estimate;
 use App\Models\Task;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -14,12 +15,23 @@ class MonthlySummaryWidget extends BaseWidget
 
     public function table(Table $table): Table
     {
+        $dailyEstimates = Estimate::query()
+            ->selectRaw('estimates.date, SUM(tasks.total_seconds_spent) as total_seconds_spent, MAX(estimates.estimated_seconds) as estimated_seconds')
+            ->leftJoin('tasks', function ($join) {
+                $join->on('estimates.date', '=', 'tasks.date')
+                    ->where('tasks.color', 'cyan');
+            })
+            ->whereDate('estimates.date', '>=', today()->startOfMonth())
+            ->groupBy('estimates.date')
+            ->orderBy('estimates.date', 'desc');
+
         return $table
             ->query(
-                Task::query()
+                Estimate::query()
                     ->selectRaw("DATE_FORMAT(tasks.date, '%Y-%m') as month, SUM(tasks.total_seconds_spent) as total_seconds_spent, SUM(estimates.estimated_seconds) as estimated_seconds")
-                    ->leftJoin('estimates', 'tasks.date', '=', 'estimates.date')
-                    ->client()
+                    ->leftJoinSub($dailyEstimates, 'tasks', function ($join) {
+                        $join->on('estimates.date', '=', 'tasks.date');
+                    })
                     ->groupBy('month')
                     ->orderBy('month', 'desc')
             )
