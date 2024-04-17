@@ -49,8 +49,6 @@ class KanbanFlowWebhookController extends Controller
 
     public function handleWebhookToday(Request $request)
     {
-        logger(__METHOD__.': hoge:request()->input() '.var_export(request()->input(), true));
-
         return $this->handleWebhook($request, Carbon::today());
     }
 
