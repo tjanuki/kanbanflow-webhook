@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Carbon;
 
 class KanbanFlowWebhookController extends Controller
 {
-    public function handleWebhook(Request $request)
+    public function handleWebhook(Request $request, ?Carbon $date = null)
     {
         $data = $request->all();
 
-        if (!isset($data['task'])) {
+        if (! isset($data['task'])) {
             return response()->json(['message' => 'No task data found']);
         }
 
@@ -26,16 +26,12 @@ class KanbanFlowWebhookController extends Controller
                 'column_id' => $data['task']['columnId'],
                 'total_seconds_spent' => $data['task']['totalSecondsSpent'],
                 'total_seconds_estimate' => $data['task']['totalSecondsEstimate'],
-                'changed_properties' => json_encode($data['changedProperties'])
+                'changed_properties' => json_encode($data['changedProperties'] ?? []),
             ]
         );
 
-        if (!$task->date) {
-            // if the task was created on Monday, set the date to the previous Saturday
-            // otherwise, set the date to the previous day
-            $task->date = $task->created_at->isMonday()
-                ? $task->created_at->subDays(2)->toDateString()
-                : $task->created_at->subDay()->toDateString();
+        if (! $task->date) {
+            $task->date = $this->getDate($task, $date);
             $task->save();
         }
 
@@ -49,5 +45,23 @@ class KanbanFlowWebhookController extends Controller
 
         // Respond to KanbanFlow
         return response()->json(['message' => "Webhook received successfully {$task->name}"]);
+    }
+
+    public function handleWebhookToday(Request $request)
+    {
+        logger(__METHOD__.': hoge:request()->input() '.var_export(request()->input(), true));
+
+        return $this->handleWebhook($request, Carbon::today());
+    }
+
+    private function getDate(Task $task, Carbon|null $date): string
+    {
+        if ($date) {
+            return $date->toDateString();
+        }
+
+        return $task->created_at->isMonday()
+            ? $task->created_at->subDays(2)->toDateString()
+            : $task->created_at->subDay()->toDateString();
     }
 }
