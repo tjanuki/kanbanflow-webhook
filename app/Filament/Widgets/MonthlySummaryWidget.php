@@ -51,7 +51,7 @@ class MonthlySummaryWidget extends BaseWidget
                     ->getStateUsing(fn($record
                     ) => number_format(($record->total_seconds_spent - $record->estimated_seconds) / 3600, 1))
                     ->alignRight(),
-            ]);
+            ])->paginated(false);
     }
 
     public function getTableRecordKey(Model $record): string
