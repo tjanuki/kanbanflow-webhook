@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\TaskExporter;
 use App\Filament\Resources\TaskResource\Pages;
 use App\Filament\Resources\TaskResource\RelationManagers;
 use App\Models\Task;
@@ -9,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ButtonAction;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 
@@ -71,7 +73,11 @@ class TaskResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()->modalHeading('Edit Task')
+                Tables\Actions\EditAction::make()->modalHeading('Edit Task'),
+            ])
+            ->headerActions([
+                Tables\Actions\ExportAction::make('Export')
+                ->exporter(TaskExporter::class)
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
