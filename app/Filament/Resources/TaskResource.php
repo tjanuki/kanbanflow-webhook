@@ -6,11 +6,11 @@ use App\Filament\Exports\TaskExporter;
 use App\Filament\Resources\TaskResource\Pages;
 use App\Filament\Resources\TaskResource\RelationManagers;
 use App\Models\Task;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\ButtonAction;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 
@@ -77,7 +77,9 @@ class TaskResource extends Resource
             ])
             ->headerActions([
                 Tables\Actions\ExportAction::make('Export')
-                ->exporter(TaskExporter::class)
+                    ->exporter(TaskExporter::class)
+                    ->formats([ExportFormat::Csv])
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
