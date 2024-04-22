@@ -78,7 +78,7 @@ class TaskResource extends Resource
             ->headerActions([
                 Tables\Actions\ExportAction::make('Export')
                     ->exporter(TaskExporter::class)
-                    ->formats([ExportFormat::Csv])
+                    ->formats([ExportFormat::Csv]),
 
             ])
             ->bulkActions([
