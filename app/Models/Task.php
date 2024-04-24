@@ -38,6 +38,10 @@ class Task extends Model
             Forms\Components\TextInput::make('total_seconds_spent')
                 ->label('Total Seconds Spent')
                 ->required(),
+            Forms\Components\TextInput::make('total_seconds_estimate')
+                ->label('Total Seconds Estimate')
+                ->required(),
+
         ];
     }
 
