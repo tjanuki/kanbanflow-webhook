@@ -34,7 +34,11 @@ class TaskResource extends Resource
                 Tables\Columns\TextColumn::make('project.name')->label('Project'),
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('total_seconds_spent')
-                    ->formatStateUsing(fn(int $state) => number_format($state / 3600, 2)),
+                    ->formatStateUsing(fn(int $state) => number_format($state / 3600, 2))
+                    ->summarize([
+                        Tables\Columns\Summarizers\Sum::make()->formatStateUsing(fn(int $state
+                        ) => number_format($state / 3600, 2))
+                    ]),
             ])
             ->defaultSort('date', 'desc')
             ->persistSortInSession()
