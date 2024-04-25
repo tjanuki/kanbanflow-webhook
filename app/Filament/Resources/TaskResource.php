@@ -34,6 +34,7 @@ class TaskResource extends Resource
                 Tables\Columns\TextColumn::make('project.name')->label('Project'),
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('total_seconds_spent')
+                    ->label('Spent (Hours)')
                     ->formatStateUsing(fn(int $state) => number_format($state / 3600, 2))
                     ->summarize([
                         Tables\Columns\Summarizers\Sum::make()->formatStateUsing(fn(int $state
@@ -89,7 +90,8 @@ class TaskResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->paginationPageOptions(['all', 10, 25, 50, 100]);
     }
 
     public static function getRelations(): array
