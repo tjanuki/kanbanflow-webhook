@@ -36,14 +36,14 @@ class TasksChart extends ChartWidget
             'labels' => $data->pluck('week'),
             'datasets' => [
                 [
-                    'label' => 'Spent (Hours)',
-                    'data' => $data->pluck('total_seconds_spent')->map(fn ($state) => $state / 3600),
-                    'backgroundColor' => '#3490dc',
-                ],
-                [
                     'label' => 'Estimated (Hours)',
                     'data' => $data->pluck('estimated_seconds')->map(fn ($state) => $state / 3600),
                     'backgroundColor' => '#38c172',
+                ],
+                [
+                    'label' => 'Spent (Hours)',
+                    'data' => $data->pluck('total_seconds_spent')->map(fn ($state) => $state / 3600),
+                    'backgroundColor' => '#3490dc',
                 ],
             ]
         ];
