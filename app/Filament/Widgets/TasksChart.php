@@ -45,11 +45,6 @@ class TasksChart extends ChartWidget
                     'data' => $data->pluck('estimated_seconds')->map(fn ($state) => $state / 3600),
                     'backgroundColor' => '#38c172',
                 ],
-                [
-                    'label' => 'Diff (Hours)',
-                    'data' => $data->map(fn ($record) => ($record->total_seconds_spent - $record->estimated_seconds) / 3600),
-                    'backgroundColor' => '#f6993f',
-                ]
             ]
         ];
     }
