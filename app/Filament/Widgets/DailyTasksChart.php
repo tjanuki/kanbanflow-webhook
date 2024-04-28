@@ -3,37 +3,28 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Estimate;
-use App\Models\Task;
 use Filament\Widgets\ChartWidget;
 
-class TasksChart extends ChartWidget
+class DailyTasksChart extends ChartWidget
 {
-    protected static ?string $heading = 'Tasks Monthly Summary';
+    protected static ?string $heading = 'Daily Task Summary';
 
     protected function getData(): array
     {
-        $dailyEstimates = Estimate::query()
+        // show monthly tasks summary by weekly
+        $data = Estimate::query()
             ->selectRaw('estimates.date, SUM(tasks.total_seconds_spent) as total_seconds_spent, MAX(estimates.estimated_seconds) as estimated_seconds')
             ->leftJoin('tasks', function ($join) {
                 $join->on('estimates.date', '=', 'tasks.date')
                     ->where('tasks.color', 'cyan');
             })
-            ->whereDate('estimates.date', '>=', today()->startOfMonth())
+            ->whereDate('estimates.date', '>=', today()->startOfWeek())
+            ->whereDate('estimates.date', '<=', today()->endOfWeek())
             ->groupBy('estimates.date')
             ->orderBy('estimates.date');
 
-        // show monthly tasks summary by weekly
-        $data = Estimate::query()
-            ->selectRaw("DATE_FORMAT(STR_TO_DATE(CONCAT(YEARWEEK(tasks.date), ' Monday'), '%X%V %W'), '%Y-%m-%d') as week, SUM(tasks.total_seconds_spent) as total_seconds_spent, SUM(estimates.estimated_seconds) as estimated_seconds")
-            ->leftJoinSub($dailyEstimates, 'tasks', function ($join) {
-                $join->on('estimates.date', '=', 'tasks.date');
-            })
-            ->groupBy('week')
-            ->orderBy('week')
-            ->get();
-
         return [
-            'labels' => $data->pluck('week'),
+            'labels' => $data->pluck('date'),
             'datasets' => [
                 [
                     'label' => 'Estimated (Hours)',
