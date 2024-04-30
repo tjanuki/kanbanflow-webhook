@@ -33,7 +33,7 @@ class InitializeEstimation extends Command
 
         $startDay = Carbon::parse($yearMonth . '-01');
 
-        // Set 6 hours for weekdays and 0 hours for weekends
+        // Set 7 hours for weekdays and 0 hours for weekends
         for ($day = $startDay->copy(); $day->lte($startDay->copy()->endOfMonth()); $day->addDay()) {
             if (Estimate::whereDate('date', $day->toDateString())->exists()) {
                 continue;
@@ -41,7 +41,7 @@ class InitializeEstimation extends Command
 
             Estimate::create([
                 'date' => $day,
-                'estimated_seconds' => $day->isWeekday() ? 6 * 3600 : 0,
+                'estimated_seconds' => $day->isWeekday() ? 7 * 3600 : 0,
             ]);
         }
 
