@@ -53,6 +53,6 @@ class DailySummaryWidget extends BaseWidget
 
     public function getTableRecordKey(Model $record): string
     {
-        return $record->date;
+        return $record->date ?? 'unknown';
     }
 }

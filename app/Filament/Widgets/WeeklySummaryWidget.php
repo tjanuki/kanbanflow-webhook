@@ -54,6 +54,6 @@ class WeeklySummaryWidget extends BaseWidget
 
     public function getTableRecordKey(Model $record): string
     {
-        return $record->week;
+        return $record->week ?? 'unknown';
     }
 }

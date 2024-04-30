@@ -56,6 +56,6 @@ class MonthlySummaryWidget extends BaseWidget
 
     public function getTableRecordKey(Model $record): string
     {
-        return $record->month;
+        return $record->month ?? 'unknown';
     }
 }
