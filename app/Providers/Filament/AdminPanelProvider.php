@@ -2,6 +2,11 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\DailySummaryWidget;
+use App\Filament\Widgets\DailyTasksChart;
+use App\Filament\Widgets\MonthlySummaryWidget;
+use App\Filament\Widgets\WeeklySummaryWidget;
+use App\Filament\Widgets\WeeklyTasksChart;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -37,8 +42,15 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            //->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
+                DailySummaryWidget::class,
+                DailyTasksChart::class,
+                MonthlySummaryWidget::class,
+                //MonthlyTasksChart::class,
+                //TasksPieChart::class,
+                WeeklySummaryWidget::class,
+                WeeklyTasksChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -59,6 +71,7 @@ class AdminPanelProvider extends PanelProvider
     public function register(): void
     {
         parent::register();
-        FilamentView::registerRenderHook('panels::body.end', fn(): string => Blade::render("@vite('resources/js/app.js')"));
+        FilamentView::registerRenderHook('panels::body.end',
+            fn (): string => Blade::render("@vite('resources/js/app.js')"));
     }
 }
