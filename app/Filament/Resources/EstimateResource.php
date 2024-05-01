@@ -22,22 +22,7 @@ class EstimateResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\DatePicker::make('date')
-                    ->label('Date')
-                    ->required(),
-                Forms\Components\TextInput::make('estimated_hours')
-                    ->label('Estimated Hours')
-                    ->helperText('Please enter the estimated time in hours.')
-                    ->required()
-                    ->numeric()
-                    ->step('0.5')
-                    ->afterStateHydrated(function ($component, $record) {
-                        if ($record) {
-                            $component->state(number_format($record->estimated_hours, 1));
-                        }
-                    })
-            ]);
+            ->schema(Estimate::getForm());
     }
 
     public static function table(Table $table): Table
@@ -53,7 +38,7 @@ class EstimateResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->form(Estimate::getForm()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -73,8 +58,6 @@ class EstimateResource extends Resource
     {
         return [
             'index' => Pages\ListEstimates::route('/'),
-            'create' => Pages\CreateEstimate::route('/create'),
-            'edit' => Pages\EditEstimate::route('/{record}/edit'),
         ];
     }
 }
