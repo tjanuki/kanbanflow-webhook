@@ -29,6 +29,8 @@ class TaskResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->paginationPageOptions([10, 25, 50, 100])
+            ->defaultPaginationPageOption(100)
             ->columns([
                 Tables\Columns\TextColumn::make('date')->sortable(),
                 Tables\Columns\TextColumn::make('project.name')->label('Project'),
@@ -90,8 +92,7 @@ class TaskResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->paginationPageOptions(['all', 10, 25, 50, 100]);
+            ]);
     }
 
     public static function getRelations(): array

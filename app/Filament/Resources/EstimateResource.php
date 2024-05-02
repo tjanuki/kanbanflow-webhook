@@ -32,9 +32,11 @@ class EstimateResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('date')->sortable(),
                 Tables\Columns\TextColumn::make('estimated_seconds')
-                    ->formatStateUsing(fn(int $state) => number_format($state / 3600, 1)),
+                    ->formatStateUsing(fn(int $state) => number_format($state / 3600, 1))
+                    ->sortable(),
             ])
-            ->defaultSort('date', 'desc')
+            ->defaultSort('date', )
+            ->defaultPaginationPageOption(50)
             ->filters([
                 Filter::make('month_year')
                     ->form([
@@ -61,7 +63,7 @@ class EstimateResource extends Resource
                         $endOfMonth = now()->setYear($year)->setMonth($month)->endOfMonth();
 
                         $query->whereBetween('date', [$startOfMonth, $endOfMonth]);
-                    }),
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->form(Estimate::getForm()),
