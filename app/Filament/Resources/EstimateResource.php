@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -35,7 +36,32 @@ class EstimateResource extends Resource
             ])
             ->defaultSort('date', 'desc')
             ->filters([
-                //
+                Filter::make('month_year')
+                    ->form([
+                        Forms\Components\Select::make('month')
+                            ->options([
+                                '1' => 'January', '2' => 'February', '3' => 'March',
+                                '4' => 'April', '5' => 'May', '6' => 'June',
+                                '7' => 'July', '8' => 'August', '9' => 'September',
+                                '10' => 'October', '11' => 'November', '12' => 'December',
+                            ])
+                            ->label('Month')
+                            ->default(now()->month)
+                            ->required(),
+                        Forms\Components\TextInput::make('year')
+                            ->numeric()
+                            ->label('Year')
+                            ->default(now()->year)
+                            ->required(),
+                    ])
+                    ->query(function ($query, array $data) {
+                        $month = intval($data['month']) ?? now()->month;
+                        $year = intval($data['year']) ?? now()->year;
+                        $startOfMonth = now()->setYear($year)->setMonth($month)->startOfMonth();
+                        $endOfMonth = now()->setYear($year)->setMonth($month)->endOfMonth();
+
+                        $query->whereBetween('date', [$startOfMonth, $endOfMonth]);
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->form(Estimate::getForm()),
