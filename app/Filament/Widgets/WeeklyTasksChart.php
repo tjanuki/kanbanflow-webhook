@@ -3,7 +3,6 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Estimate;
-use App\Models\Task;
 use Filament\Widgets\ChartWidget;
 
 class WeeklyTasksChart extends ChartWidget
@@ -18,7 +17,7 @@ class WeeklyTasksChart extends ChartWidget
                 $join->on('estimates.date', '=', 'tasks.date')
                     ->where('tasks.color', 'cyan');
             })
-            ->whereDate('estimates.date', '>=', today()->startOfMonth())
+            ->whereBetween('estimates.date', [today()->startOfMonth(), today()->endOfMonth()])
             ->groupBy('estimates.date')
             ->orderBy('estimates.date');
 
@@ -45,7 +44,7 @@ class WeeklyTasksChart extends ChartWidget
                     'data' => $data->pluck('total_seconds_spent')->map(fn ($state) => $state / 3600),
                     'backgroundColor' => '#3490dc',
                 ],
-            ]
+            ],
         ];
     }
 

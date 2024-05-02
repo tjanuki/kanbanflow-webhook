@@ -20,7 +20,7 @@ class WeeklySummaryWidget extends BaseWidget
                 $join->on('estimates.date', '=', 'tasks.date')
                     ->where('tasks.color', 'cyan');
             })
-            ->whereDate('estimates.date', '>=', today()->startOfMonth())
+            ->whereBetween('estimates.date', [today()->startOfMonth(), today()->endOfMonth()])
             ->groupBy('estimates.date')
             ->orderBy('estimates.date', 'desc');
 
