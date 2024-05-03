@@ -71,6 +71,9 @@ class AdminPanelProvider extends PanelProvider
     public function register(): void
     {
         parent::register();
+        FilamentView::registerRenderHook('panels::head.end',
+            fn (): string => '<link rel="icon" href="/favicon.ico" type="image/x-icon">');
+
         FilamentView::registerRenderHook('panels::body.end',
             fn (): string => Blade::render("@vite('resources/js/app.js')"));
     }
