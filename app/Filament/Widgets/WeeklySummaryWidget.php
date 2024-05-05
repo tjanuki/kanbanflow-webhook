@@ -28,7 +28,7 @@ class WeeklySummaryWidget extends BaseWidget
             ->query(
                 Estimate::query()
                     ->selectRaw("DATE_FORMAT(STR_TO_DATE(CONCAT(YEARWEEK(tasks.date), ' Monday'), '%X%V %W'), '%Y-%m-%d') as week, SUM(tasks.total_seconds_spent) as total_seconds_spent, SUM(estimates.estimated_seconds) as estimated_seconds")
-                    ->leftJoinSub($dailyEstimates, 'tasks', function ($join) {
+                    ->joinSub($dailyEstimates, 'tasks', function ($join) {
                         $join->on('estimates.date', '=', 'tasks.date');
                     })
                     ->groupBy('week')
