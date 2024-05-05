@@ -21,7 +21,7 @@ class MonthlySummaryWidget extends BaseWidget
                 $join->on('estimates.date', '=', 'tasks.date')
                     ->where('tasks.color', 'cyan');
             })
-            ->whereDate('estimates.date', '>=', today()->startOfMonth())
+            ->whereDate('estimates.date', '<=', today()->endOfMonth())
             ->groupBy('estimates.date')
             ->orderBy('estimates.date', 'desc');
 
@@ -29,7 +29,7 @@ class MonthlySummaryWidget extends BaseWidget
             ->query(
                 Estimate::query()
                     ->selectRaw("DATE_FORMAT(tasks.date, '%Y-%m') as month, SUM(tasks.total_seconds_spent) as total_seconds_spent, SUM(estimates.estimated_seconds) as estimated_seconds")
-                    ->leftJoinSub($dailyEstimates, 'tasks', function ($join) {
+                    ->joinSub($dailyEstimates, 'tasks', function ($join) {
                         $join->on('estimates.date', '=', 'tasks.date');
                     })
                     ->groupBy('month')
