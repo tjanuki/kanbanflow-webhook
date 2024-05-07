@@ -27,7 +27,7 @@ class Dashboard extends \Filament\Pages\Dashboard
             WeeklyTasksChart::class,
             WeeklySummaryWidget::class,
             TasksPieChart::class,
-            MonthlyTasksChart::class,
+            MonthlySummaryWidget::class
         ];
     }
 }
