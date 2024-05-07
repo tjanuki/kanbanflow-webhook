@@ -2,9 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Dashboard;
 use App\Filament\Widgets\DailySummaryWidget;
 use App\Filament\Widgets\DailyTasksChart;
 use App\Filament\Widgets\MonthlySummaryWidget;
+use App\Filament\Widgets\MonthlyTasksChart;
+use App\Filament\Widgets\TasksPieChart;
 use App\Filament\Widgets\WeeklySummaryWidget;
 use App\Filament\Widgets\WeeklyTasksChart;
 use Filament\Http\Middleware\Authenticate;
@@ -39,16 +42,13 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            ->pages([
-                Pages\Dashboard::class,
-            ])
-            //->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->pages([])
             ->widgets([
                 DailySummaryWidget::class,
                 DailyTasksChart::class,
                 MonthlySummaryWidget::class,
-                //MonthlyTasksChart::class,
-                //TasksPieChart::class,
+                MonthlyTasksChart::class,
+                TasksPieChart::class,
                 WeeklySummaryWidget::class,
                 WeeklyTasksChart::class,
             ])
