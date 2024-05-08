@@ -27,7 +27,7 @@ class DailySummaryWidget extends BaseWidget
                     ->whereDate('estimates.date', '>=', today()->startOfWeek())
                     ->whereDate('estimates.date', '<=', today()->endOfWeek())
                     ->groupBy('estimates.date')
-                    ->orderBy('estimates.date', 'desc')
+                    ->orderBy('estimates.date')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('date')

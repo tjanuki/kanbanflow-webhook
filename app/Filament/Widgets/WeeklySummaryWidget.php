@@ -32,7 +32,7 @@ class WeeklySummaryWidget extends BaseWidget
                         $join->on('estimates.date', '=', 'tasks.date');
                     })
                     ->groupBy('week')
-                    ->orderBy('week', 'desc')
+                    ->orderBy('week')
             )->columns([
                 Tables\Columns\TextColumn::make('week')
                     ->label('Week'),

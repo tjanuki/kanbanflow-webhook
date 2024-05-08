@@ -11,7 +11,6 @@ class DailyTasksChart extends ChartWidget
 
     protected function getData(): array
     {
-        // show monthly tasks summary by weekly
         $data = Estimate::query()
             ->selectRaw('estimates.date, SUM(tasks.total_seconds_spent) as total_seconds_spent, MAX(estimates.estimated_seconds) as estimated_seconds')
             ->leftJoin('tasks', function ($join) {
