@@ -35,7 +35,7 @@ class TaskResource extends Resource
                 Tables\Columns\TextColumn::make('date')->sortable(),
                 Tables\Columns\TextColumn::make('project.name')->label('Project'),
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('total_seconds_spent')
+                Tables\Columns\TextColumn::make('total_hours')
                     ->label('Spent (Hours)')
                     ->formatStateUsing(fn(int $state) => number_format($state / 3600, 2))
                     ->summarize([
