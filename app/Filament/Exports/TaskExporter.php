@@ -16,7 +16,7 @@ class TaskExporter extends Exporter
         return [
             ExportColumn::make('date'),
             ExportColumn::make('name')->label('Task Name'),
-            ExportColumn::make('total_seconds_spent')
+            ExportColumn::make('total_seconds_spent')->label('Spent (Hours)')
                 ->formatStateUsing(function (int $state): string {
                     return number_format($state / 3600, 1);
                 }),
