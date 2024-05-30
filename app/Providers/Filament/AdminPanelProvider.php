@@ -8,6 +8,7 @@ use App\Filament\Widgets\DailyTasksChart;
 use App\Filament\Widgets\MonthlySummaryWidget;
 use App\Filament\Widgets\MonthlyTasksChart;
 use App\Filament\Widgets\TasksPieChart;
+use App\Filament\Widgets\WeeklySpentOverview;
 use App\Filament\Widgets\WeeklySummaryWidget;
 use App\Filament\Widgets\WeeklyTasksChart;
 use Filament\Http\Middleware\Authenticate;
@@ -44,6 +45,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([])
             ->widgets([
+                WeeklySpentOverview::class,
                 DailySummaryWidget::class,
                 DailyTasksChart::class,
                 MonthlySummaryWidget::class,

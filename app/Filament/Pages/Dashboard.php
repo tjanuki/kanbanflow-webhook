@@ -7,6 +7,7 @@ use App\Filament\Widgets\DailyTasksChart;
 use App\Filament\Widgets\MonthlySummaryWidget;
 use App\Filament\Widgets\MonthlyTasksChart;
 use App\Filament\Widgets\TasksPieChart;
+use App\Filament\Widgets\WeeklySpentOverview;
 use App\Filament\Widgets\WeeklySummaryWidget;
 use App\Filament\Widgets\WeeklyTasksChart;
 use Filament\Facades\Filament;
@@ -22,6 +23,7 @@ class Dashboard extends \Filament\Pages\Dashboard
     protected function getHeaderWidgets(): array
     {
         return [
+            WeeklySpentOverview::class,
             DailyTasksChart::class,
             DailySummaryWidget::class,
             WeeklyTasksChart::class,
