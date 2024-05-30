@@ -17,27 +17,26 @@ class WeeklySpentOverview extends BaseWidget
             ->sum('estimated_seconds');
         $todaySpent = Task::query()
             ->whereDate('date', today())
+            ->where('tasks.color', 'cyan')
             ->sum('total_seconds_spent');
         $todayTimeLeft =  number_format(($todayEstimate - $todaySpent) / 3600, 1);
 
         $weekEstimate = Estimate::query()
             ->whereBetween('date', [today()->startOfWeek(), today()->endOfWeek()])
             ->sum('estimated_seconds');
-
         $weekSpent = Task::query()
             ->whereBetween('date', [today()->startOfWeek(), today()->endOfWeek()])
+            ->where('tasks.color', 'cyan')
             ->sum('total_seconds_spent');
-
         $weekTimeLeft = number_format(($weekEstimate - $weekSpent) / 3600, 1);
 
         $monthEstimate = Estimate::query()
             ->whereBetween('date', [today()->startOfMonth(), today()->endOfMonth()])
             ->sum('estimated_seconds');
-
         $monthSpent = Task::query()
             ->whereBetween('date', [today()->startOfMonth(), today()->endOfMonth()])
+            ->where('tasks.color', 'cyan')
             ->sum('total_seconds_spent');
-
         $monthTimeLeft = number_format(($monthEstimate - $monthSpent) / 3600, 1);
 
         return [
