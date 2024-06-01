@@ -49,7 +49,9 @@ class KanbanFlowWebhookController extends Controller
 
     public function handleWebhookToday(Request $request)
     {
-        return $this->handleWebhook($request, Carbon::today());
+        $nowInToronto = Carbon::now('America/Toronto')->toDateString();
+
+        return $this->handleWebhook($request, $nowInToronto);
     }
 
     private function getDate(Task $task, Carbon|null $date): string
