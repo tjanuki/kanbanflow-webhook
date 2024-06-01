@@ -31,7 +31,7 @@ class KanbanFlowWebhookController extends Controller
         );
 
         if (! $task->date) {
-            $task->date = $this->getDate($task, $date);
+            $task->date = today();
             $task->save();
         }
 
@@ -49,19 +49,6 @@ class KanbanFlowWebhookController extends Controller
 
     public function handleWebhookToday(Request $request)
     {
-        $nowInToronto = Carbon::now('America/Toronto')->toDateString();
-
-        return $this->handleWebhook($request, $nowInToronto);
-    }
-
-    private function getDate(Task $task, Carbon|null $date): string
-    {
-        if ($date) {
-            return $date->toDateString();
-        }
-
-        return $task->created_at->isMonday()
-            ? $task->created_at->subDays(2)->toDateString()
-            : $task->created_at->subDay()->toDateString();
+        return $this->handleWebhook($request, today());
     }
 }
