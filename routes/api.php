@@ -11,7 +11,3 @@ Route::get('/user', function (Request $request) {
 Route::match(['get', 'post'], '/kanbanflow-webhook', [KanbanFlowWebhookController::class, 'handleWebhook'])
 //    ->middleware('auth:sanctum');
 ;
-
-Route::match(['get', 'post'], '/kanbanflow-webhook/today', [KanbanFlowWebhookController::class, 'handleWebhookToday'])
-//    ->middleware('auth:sanctum');
-;

@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 
 class KanbanFlowWebhookController extends Controller
 {
-    public function handleWebhook(Request $request, ?Carbon $date = null)
+    public function handleWebhook(Request $request)
     {
         $data = $request->all();
 
@@ -45,10 +45,5 @@ class KanbanFlowWebhookController extends Controller
 
         // Respond to KanbanFlow
         return response()->json(['message' => "Webhook received successfully {$task->name}"]);
-    }
-
-    public function handleWebhookToday(Request $request)
-    {
-        return $this->handleWebhook($request, today());
     }
 }
