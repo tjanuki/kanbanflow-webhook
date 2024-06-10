@@ -3,8 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Exports\TaskExporter;
+use App\Filament\Resources\TaskResource\Actions\DownloadCsvAction;
 use App\Filament\Resources\TaskResource\Pages;
-use App\Filament\Resources\TaskResource\RelationManagers;
 use App\Models\Task;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
@@ -37,10 +37,10 @@ class TaskResource extends Resource
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('total_seconds_spent')
                     ->label('Spent (Hours)')
-                    ->formatStateUsing(fn(int $state) => number_format($state / 3600, 2))
+                    ->formatStateUsing(fn (int $state) => number_format($state / 3600, 2))
                     ->summarize([
-                        Tables\Columns\Summarizers\Sum::make()->formatStateUsing(fn(int $state
-                        ) => number_format($state / 3600, 2))
+                        Tables\Columns\Summarizers\Sum::make()->formatStateUsing(fn (int $state
+                        ) => number_format($state / 3600, 2)),
                     ]),
             ])
             ->defaultSort('date', 'desc')
@@ -48,7 +48,7 @@ class TaskResource extends Resource
             ->filters([
                 // filter by project
                 Tables\Filters\SelectFilter::make('color')
-                    ->options(fn() => \App\Models\Project::pluck('name', 'color')->toArray())
+                    ->options(fn () => \App\Models\Project::pluck('name', 'color')->toArray())
                     ->label('Project')
                     ->default('cyan'),
                 // filtered by date
@@ -86,6 +86,7 @@ class TaskResource extends Resource
                 Tables\Actions\ExportAction::make('Export')
                     ->exporter(TaskExporter::class)
                     ->formats([ExportFormat::Csv]),
+                DownloadCsvAction::make('Download CSV'),
 
             ])
             ->bulkActions([
