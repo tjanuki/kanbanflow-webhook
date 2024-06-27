@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Exports\TaskExporter;
 use App\Filament\Resources\TaskResource\Actions\DownloadCsvAction;
 use App\Filament\Resources\TaskResource\Pages;
+use App\Models\Project;
 use App\Models\Task;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
@@ -28,6 +29,7 @@ class TaskResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $mainProject = Project::where('is_default', true)->orderBy('id')->first();
         return $table
             ->paginationPageOptions([10, 25, 50, 100])
             ->defaultPaginationPageOption(100)
@@ -50,7 +52,7 @@ class TaskResource extends Resource
                 Tables\Filters\SelectFilter::make('color')
                     ->options(fn () => \App\Models\Project::pluck('name', 'color')->toArray())
                     ->label('Project')
-                    ->default('cyan'),
+                    ->default($mainProject?->color),
                 // filtered by date
                 Filter::make('month_year')
                     ->form([

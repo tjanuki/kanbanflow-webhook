@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Filament\Forms;
 
 class Task extends Model
 {
@@ -55,9 +54,11 @@ class Task extends Model
         return $this->belongsTo(Project::class, 'color', 'color');
     }
 
-    public function scopeClient(Builder $query): Builder
+    public function scopeWithDefaultProjects($query)
     {
-        return $query->where('color', 'cyan');
+        return $query->join('projects', function ($join) {
+                    $join->on('tasks.color', '=', 'projects.color')
+                        ->where('projects.is_default', true);
+                });
     }
-
 }

@@ -16,10 +16,7 @@ class WeeklySummaryWidget extends BaseWidget
     {
         $dailyEstimates = Estimate::query()
             ->selectRaw('estimates.date, SUM(tasks.total_seconds_spent) as total_seconds_spent, MAX(estimates.estimated_seconds) as estimated_seconds')
-            ->leftJoin('tasks', function ($join) {
-                $join->on('estimates.date', '=', 'tasks.date')
-                    ->where('tasks.color', 'cyan');
-            })
+            ->withDefaultProjects()
             ->whereBetween('estimates.date', [today()->startOfMonth(), today()->endOfMonth()])
             ->groupBy('estimates.date')
             ->orderBy('estimates.date', 'desc');

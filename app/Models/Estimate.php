@@ -40,4 +40,15 @@ class Estimate extends Model
                 })
         ];
     }
+
+    public function scopeWithDefaultProjects($query)
+    {
+        return $query->leftJoin('tasks', function ($join) {
+            $join->on('estimates.date', '=', 'tasks.date')
+                ->join('projects', function ($join) {
+                    $join->on('tasks.color', '=', 'projects.color')
+                        ->where('projects.is_default', true);
+                });
+        });
+    }
 }
