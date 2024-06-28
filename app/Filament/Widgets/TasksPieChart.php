@@ -27,8 +27,8 @@ class TasksPieChart extends ChartWidget
             'labels' => $data->pluck('project_name'),
             'datasets' => [
                 [
-                    'data' => $data->pluck('total_seconds_spent')->map(fn($state) => $state / 3600),
-                    'backgroundColor' => ['#3490dc', '#38c172', '#f6993f', '#e3342f', '#6cb2eb']
+                    'data' => $data->pluck('total_seconds_spent')->map(fn($state) => number_format($state / 3600, 1)),
+                    'backgroundColor' => ['#dbffff', '#c7f7ff', '#ffffe0', '#3490dc', '#38c172', '#f6993f', '#e3342f', '#6cb2eb']
                 ]
             ]
         ];
