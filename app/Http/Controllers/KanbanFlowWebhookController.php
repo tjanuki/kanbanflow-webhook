@@ -16,6 +16,10 @@ class KanbanFlowWebhookController extends Controller
             return response()->json(['message' => 'No task data found']);
         }
 
+        if ($data['task']['totalSecondsSpent'] === 0) {
+            return response()->json(['message' => 'Task has no time spent']);
+        }
+
         // Create or update the task
         $task = Task::updateOrCreate(
             ['kanbanflow_task_id' => $data['task']['_id']],
