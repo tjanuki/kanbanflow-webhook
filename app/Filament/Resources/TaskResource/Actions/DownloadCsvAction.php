@@ -32,7 +32,7 @@ class DownloadCsvAction extends Action
                     fputcsv($handle, ['Date', 'Task Name', 'Spent (Hours)']);
 
                     $tasks = Task::query()
-                        ->where('tasks.color', 'cyan')
+                        ->withDefaultProjects()
                         ->whereBetween('date', [$startDate, $endDate])
                         ->orderBy('date', 'desc')
                         ->get();
