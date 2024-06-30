@@ -56,9 +56,10 @@ class Task extends Model
 
     public function scopeWithDefaultProjects($query)
     {
-        return $query->join('projects', function ($join) {
-                    $join->on('tasks.color', '=', 'projects.color')
-                        ->where('projects.is_default', true);
-                });
+        return $query->whereIn('color', function ($query) {
+            $query->select('color')
+                ->from('projects')
+                ->where('is_default', true);
+        });
     }
 }
