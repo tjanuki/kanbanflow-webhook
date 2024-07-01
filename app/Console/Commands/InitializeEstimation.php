@@ -41,7 +41,7 @@ class InitializeEstimation extends Command
 
             Estimate::create([
                 'date' => $day,
-                'estimated_seconds' => $day->isWeekday() ? 7 * 3600 : 0,
+                'estimated_seconds' => $day->isWeekday() ? config('kanbanflow.estimation.base_seconds') : 0,
             ]);
         }
 
