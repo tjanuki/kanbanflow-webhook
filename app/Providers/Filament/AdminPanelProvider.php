@@ -7,6 +7,7 @@ use App\Filament\Widgets\DailySummaryWidget;
 use App\Filament\Widgets\DailyTasksChart;
 use App\Filament\Widgets\MonthlySummaryWidget;
 use App\Filament\Widgets\MonthlyTasksChart;
+use App\Filament\Widgets\ProjectRatioOverview;
 use App\Filament\Widgets\TasksPieChart;
 use App\Filament\Widgets\WeeklySpentOverview;
 use App\Filament\Widgets\WeeklySummaryWidget;
@@ -46,6 +47,7 @@ class AdminPanelProvider extends PanelProvider
             ->pages([])
             ->widgets([
                 WeeklySpentOverview::class,
+                ProjectRatioOverview::class,
                 DailySummaryWidget::class,
                 DailyTasksChart::class,
                 MonthlySummaryWidget::class,

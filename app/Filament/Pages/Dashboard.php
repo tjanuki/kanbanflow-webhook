@@ -6,6 +6,7 @@ use App\Filament\Widgets\DailySummaryWidget;
 use App\Filament\Widgets\DailyTasksChart;
 use App\Filament\Widgets\MonthlySummaryWidget;
 use App\Filament\Widgets\MonthlyTasksChart;
+use App\Filament\Widgets\ProjectRatioOverview;
 use App\Filament\Widgets\TasksPieChart;
 use App\Filament\Widgets\WeeklySpentOverview;
 use App\Filament\Widgets\WeeklySummaryWidget;
@@ -24,6 +25,7 @@ class Dashboard extends \Filament\Pages\Dashboard
     {
         return [
             WeeklySpentOverview::class,
+            ProjectRatioOverview::class,
             DailyTasksChart::class,
             DailySummaryWidget::class,
             WeeklyTasksChart::class,
