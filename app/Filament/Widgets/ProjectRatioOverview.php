@@ -30,17 +30,23 @@ class ProjectRatioOverview extends BaseWidget
         $monthlyRatio = $this->getRatio($monthlyTasks);
 
         return [
-            Stat::make('Daily Ratio:'  , $dailyRatio->join(' : ')),
-            Stat::make('Weekly Ratio', $weeklyRatio->join(' : ')),
-            Stat::make('Monthly Ratio', $monthlyRatio->join(' : ')),
+            Stat::make('Daily Ratio', $dailyRatio->map(fn($ratio) => $ratio . '%')->join(' / '))
+                ->chart($dailyRatio->values()->toArray())
+                ->color('success'),
+            Stat::make('Weekly Ratio', $weeklyRatio->map(fn($ratio) => $ratio . '%')->join(' / '))
+                ->chart($weeklyRatio->values()->toArray())
+                ->color('success'),
+            Stat::make('Monthly Ratio', $monthlyRatio->map(fn($ratio) => $ratio . '%')->join(' / '))
+                ->chart($monthlyRatio->values()->toArray())
+                ->color('success'),
         ];
     }
 
     private function getRatio(Collection $tasks): Collection
     {
-        $totalSum = $tasks->sum();
+        $totalSum = $tasks->sum() ?: 1;
         return $tasks->map(function ($value) use ($totalSum) {
-            return number_format($value / $totalSum * 100, 0) . '%';
+            return number_format($value / $totalSum * 100, 0);
         });
     }
 }
