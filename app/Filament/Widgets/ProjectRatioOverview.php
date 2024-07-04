@@ -14,15 +14,21 @@ class ProjectRatioOverview extends BaseWidget
         $targetProjects = Project::where('is_default', true)->get();
         $dailyTasks = $targetProjects->mapWithKeys(function ($project) {
             return [
-                $project->name => number_format($project->tasks()->whereDate('date', today())->sum('total_seconds_spent') / 3600, 1)];
+                $project->name => number_format($project->tasks()->whereDate('date',
+                        today())->sum('total_seconds_spent') / 3600, 1)
+            ];
         });
         $weeklyTasks = $targetProjects->mapWithKeys(function ($project) {
             return [
-                $project->name => number_format($project->tasks()->whereBetween('date', [today()->startOfWeek(), today()->endOfWeek()])->sum('total_seconds_spent') / 3600, 1)];
+                $project->name => number_format($project->tasks()->whereBetween('date',
+                        [today()->startOfWeek(), today()->endOfWeek()])->sum('total_seconds_spent') / 3600, 1)
+            ];
         });
         $monthlyTasks = $targetProjects->mapWithKeys(function ($project) {
             return [
-                $project->name => number_format($project->tasks()->whereBetween('date', [today()->startOfMonth(), today()->endOfMonth()])->sum('total_seconds_spent') / 3600, 1)];
+                $project->name => number_format($project->tasks()->whereBetween('date',
+                        [today()->startOfMonth(), today()->endOfMonth()])->sum('total_seconds_spent') / 3600, 1)
+            ];
         });
 
         $dailyRatio = $this->getRatio($dailyTasks);
@@ -30,14 +36,17 @@ class ProjectRatioOverview extends BaseWidget
         $monthlyRatio = $this->getRatio($monthlyTasks);
 
         return [
-            Stat::make('Daily Ratio', $dailyRatio->map(fn($ratio) => $ratio . '%')->join(' / '))
-                ->chart($dailyRatio->values()->toArray())
+            Stat::make('Daily Ratio', $dailyRatio->map(fn($ratio) => $ratio)->join(' - '))
+                ->chart($this->insertZeros($dailyRatio))
+                ->description($dailyRatio->keys()->join(' - '))
                 ->color('success'),
-            Stat::make('Weekly Ratio', $weeklyRatio->map(fn($ratio) => $ratio . '%')->join(' / '))
-                ->chart($weeklyRatio->values()->toArray())
+            Stat::make('Weekly Ratio', $weeklyRatio->map(fn($ratio) => $ratio)->join(' - '))
+                ->chart($this->insertZeros($weeklyRatio))
+                ->description($dailyRatio->keys()->join(' - '))
                 ->color('success'),
-            Stat::make('Monthly Ratio', $monthlyRatio->map(fn($ratio) => $ratio . '%')->join(' / '))
-                ->chart($monthlyRatio->values()->toArray())
+            Stat::make('Monthly Ratio', $monthlyRatio->map(fn($ratio) => $ratio)->join(' - '))
+                ->chart($this->insertZeros($monthlyRatio))
+                ->description($dailyRatio->keys()->join(' - '))
                 ->color('success'),
         ];
     }
@@ -49,4 +58,13 @@ class ProjectRatioOverview extends BaseWidget
             return number_format($value / $totalSum * 100, 0);
         });
     }
+
+    private function insertZeros(Collection $collection): array
+    {
+        $values = $collection->values();
+        return $values->flatMap(function ($value, $index) use ($values) {
+            return $index % 2 === 0 ? [$value * 100, 0] : [$value * 100];
+        })->toArray();
+    }
+
 }
