@@ -52,7 +52,7 @@ class TaskResource extends Resource
                 Tables\Filters\SelectFilter::make('color')
                     ->options(fn () => \App\Models\Project::pluck('name', 'color')->toArray())
                     ->label('Project')
-                    ->default($mainProject?->color),
+                    ->default(null),
                 // filtered by date
                 Filter::make('month_year')
                     ->form([
