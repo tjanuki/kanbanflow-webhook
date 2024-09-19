@@ -33,12 +33,12 @@ class WeeklySummaryWidget extends BaseWidget
             )->columns([
                 Tables\Columns\TextColumn::make('week')
                     ->label('Week'),
-                Tables\Columns\TextColumn::make('total_seconds_spent')
-                    ->label('Spent (Hours)')
-                    ->formatStateUsing(fn ($state) => number_format($state / 3600, 1))
-                    ->alignRight(),
                 Tables\Columns\TextColumn::make('estimated_seconds')
                     ->label('Estimated (Hours)')
+                    ->formatStateUsing(fn ($state) => number_format($state / 3600, 1))
+                    ->alignRight(),
+                Tables\Columns\TextColumn::make('total_seconds_spent')
+                    ->label('Spent (Hours)')
                     ->formatStateUsing(fn ($state) => number_format($state / 3600, 1))
                     ->alignRight(),
                 Tables\Columns\TextColumn::make('difference')

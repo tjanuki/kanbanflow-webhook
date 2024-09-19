@@ -32,12 +32,12 @@ class DailySummaryWidget extends BaseWidget
                         return Carbon::parse($state)->format('Y-m-d [D]');
                     })
                     ->label('Date'),
-                Tables\Columns\TextColumn::make('total_seconds_spent')
-                    ->label('Spent (Hours)')
-                    ->formatStateUsing(fn ($state) => number_format($state / 3600, 1))
-                    ->alignRight(),
                 Tables\Columns\TextColumn::make('estimated_seconds')
                     ->label('Estimated (Hours)')
+                    ->formatStateUsing(fn ($state) => number_format($state / 3600, 1))
+                    ->alignRight(),
+                Tables\Columns\TextColumn::make('total_seconds_spent')
+                    ->label('Spent (Hours)')
                     ->formatStateUsing(fn ($state) => number_format($state / 3600, 1))
                     ->alignRight(),
                 Tables\Columns\TextColumn::make('difference')

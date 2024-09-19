@@ -35,12 +35,12 @@ class MonthlySummaryWidget extends BaseWidget
             ->columns([
                 Tables\Columns\TextColumn::make('month')
                     ->label('Month'),
-                Tables\Columns\TextColumn::make('total_seconds_spent')
-                    ->label('Spent (Hours)')
-                    ->formatStateUsing(fn($state) => number_format($state / 3600, 1))
-                    ->alignRight(),
                 Tables\Columns\TextColumn::make('estimated_seconds')
                     ->label('Estimated (Hours)')
+                    ->formatStateUsing(fn($state) => number_format($state / 3600, 1))
+                    ->alignRight(),
+                Tables\Columns\TextColumn::make('total_seconds_spent')
+                    ->label('Spent (Hours)')
                     ->formatStateUsing(fn($state) => number_format($state / 3600, 1))
                     ->alignRight(),
                 Tables\Columns\TextColumn::make('difference')
